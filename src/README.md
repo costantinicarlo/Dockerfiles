@@ -12,8 +12,7 @@ Then set this as the working directory in a Terminal and build the image as usua
 ### Example
 
 ```bash
-$ cd /path/to/dockerfiles/dir/
-$ mv -f dockerfilename /path/to/destination/dir/Dockerfile
+$ cp /path/to/dockerfiles/dir/dockerfile /path/to/destination/dir/Dockerfile
 $ cd /path/to/destination/dir/
-$ docker build -t imagename:imagetag
+$ docker build -t imagename:imagetag .
 ```
