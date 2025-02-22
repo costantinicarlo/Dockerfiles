@@ -1,0 +1,70 @@
+# If not yet available, pull following user image from Docker Hub container registry
+# docker pull mavelli/rocker-bayesian
+
+# Use image with pre-installed Bayesian tools on top of official rocker-verse image
+FROM mavelli/rocker-bayesian:latest
+  
+# Install remotes package to install from GitHub
+RUN R -e "install.packages('remotes')"
+
+# Install CmdStanR from GitHub
+RUN R -e "remotes::install_github('stan-dev/cmdstanr')"
+
+# Install CmdStan (CmdStanR requires CmdStan to be installed)
+RUN R -e "library(cmdstanr); install_cmdstan()"
+
+# Install msocc from GitHub
+RUN R -e "remotes::install_github('StrattonCh/msocc')"
+
+# Install rethinking from GitHub
+RUN R -e "remotes::install_github('rmcelreath/rethinking')"
+
+# Install following packages from CRAN
+RUN install2.r --error --skipinstalled --ncpus -6 \
+  bbmle \
+  jagsUI \
+  runjags \
+  MCMCvis \
+  nimble \
+  pracma \
+  TMB \
+  RTMB \
+  tmbstan \
+# model selection and multimodel inference
+  AICcmodavg \
+  DHARMa \
+  glmnet \
+  MuMIn \
+# general-purpose GLM(M) and GAM(M)
+  gam \
+  gamm4 \
+  glmmTMB \
+  MCMCglmm \
+  PLNmodels \
+  pscl \
+  VGAM \
+# structural equation models
+  dagitty \
+  lavaan \
+  blavaan \
+# population ecology packages
+  multiocc \
+  nimbleEcology \
+  nmixgof \
+  RMark \
+  spOccupancy \
+  stocc \
+  unmarked \
+  ubms \
+# matrix population models
+  exactLTRE \
+  popbio \
+  popdemo \
+  Rramas \
+  stagePop \
+# educational material
+  AHMbook \
+  ASMbook \
+  IPMbook \
+  emdbook \
+&& rm -rf /tmp/downloaded_packages

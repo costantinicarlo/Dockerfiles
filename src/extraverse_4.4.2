@@ -1,0 +1,25 @@
+# If not yet available, pull following user image from Docker Hub container registry
+# docker pull rocker/verse:4.4.2
+
+# Build the image with
+# docker build -t costantinicarlo/extraverse:4.4.2 .
+
+# Use image with pre-installed RStudio Server and tidyverse ecosystem + TeX tools
+FROM rocker/verse:4.4.2
+
+# Install ggalluvial package from GitHub
+# currently, building the vignette fails due to missing packages
+RUN R -e "remotes::install_github('corybrunson/ggalluvial@main', build_vignettes = FALSE)"
+  
+# Install arsenal of graphics manipulation packages from CRAN
+RUN install2.r --error --skipinstalled --ncpus -6 \
+  gridGraphics \
+  patchwork \
+  ggplotify \
+  GGally \
+  ggExtra \
+  ggpubr \
+  ggrepel \
+  ggridges \
+  ggthemes \
+  && rm -rf /tmp/downloaded_packages

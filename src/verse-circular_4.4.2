@@ -1,0 +1,46 @@
+# If not yet available, pull following user image from Docker Hub container registry
+# docker pull rocker/verse:4.4.2
+
+# Build the image with
+# docker build -t verse-circular:4.4.2 .
+
+# Use image with pre-installed RStudio Server and tidyverse ecosystem + TeX tools
+FROM rocker/verse:4.4.2
+
+# Install tcl/tk needed by some of the packages (e.g. NPCirc)
+RUN apt-get update && apt-get install -y \
+    tcl tk tcl-dev tk-dev
+    
+# Install the OpenGL Utility Library reguired by the rgl dependency
+RUN apt-get update && apt-get install -y \
+    libglu1-mesa libglu1-mesa-dev \
+    libx11-dev libxt-dev \
+    libxrender-dev libxmu-dev
+  
+# Install remotes package to install from GitHub
+RUN R -e "install.packages('remotes')"
+
+# Install circglmbayes from GitHub
+RUN R -e "remotes::install_github('keesmulder/circglmbayes')"
+
+# Install following packages from CRAN
+RUN install2.r --error --skipinstalled --ncpus -6 \
+  ActCR \
+  activity \
+  bpnreg \
+  circlize \
+  CircMLE \
+  CircNNTSR \
+  CircOutlier \
+  CircSpaceTime \
+  CircStats \
+  circular \
+  circularEV \
+  Directional \
+  momentuHMM \
+  moveHMM \
+  movMF \
+  NPCirc \
+  OptCirClust \
+  zeitgebr \
+  && rm -rf /tmp/downloaded_packages
