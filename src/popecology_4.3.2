@@ -13,6 +13,15 @@ RUN R -e "remotes::install_github('stan-dev/cmdstanr')"
 # Install CmdStan (CmdStanR requires CmdStan to be installed)
 RUN R -e "library(cmdstanr); install_cmdstan()"
 
+# Install TMB from CRAN
+# to ensures it's built with the correct version of Matrix
+RUN R -e "install.packages('Matrix', type = 'source')"
+RUN R -e "install.packages('TMB', type = 'source')"
+
+# Install torch from CRAN and reinstall to insure all dependencies are included
+RUN R -e "install.packages('torch')"
+RUN R -e "torch::install_torch(reinstall = TRUE)"
+
 # Install msocc from GitHub
 RUN R -e "remotes::install_github('StrattonCh/msocc')"
 
@@ -27,7 +36,6 @@ RUN install2.r --error --skipinstalled --ncpus -6 \
   MCMCvis \
   nimble \
   pracma \
-  TMB \
   RTMB \
   tmbstan \
 # model selection and multimodel inference
